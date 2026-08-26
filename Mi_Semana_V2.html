@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mi Semana</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f4f5f9;color:#20222b;font-family:Arial,Helvetica,sans-serif}
+.app{max-width:1000px;margin:auto;padding:18px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
+h1{margin:0;font-size:28px}.sub{color:#777;font-size:14px;margin-top:4px}
+button{border:0;border-radius:10px;padding:11px 15px;cursor:pointer;font-weight:700}
+.primary{background:#635bff;color:white}.secondary{background:white;border:1px solid #ddd}
+.tabs{display:flex;gap:8px;margin-bottom:16px}.tab.active{background:#635bff;color:#fff}.tab{background:#fff;border:1px solid #ddd}
+.panel{background:#fff;border:1px solid #e2e3ea;border-radius:16px;padding:18px;margin-bottom:16px}
+.hidden{display:none}.form{display:grid;grid-template-columns:1fr 1fr;gap:12px}.full{grid-column:1/-1}
+label{font-weight:bold;font-size:13px;display:block;margin-bottom:6px}
+input,select{width:100%;padding:12px;border:1px solid #d9dae2;border-radius:9px;font-size:15px}
+.recipe-list{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:15px}
+.recipe{border:1px solid #e3e3e8;border-radius:12px;padding:13px;display:flex;justify-content:space-between;gap:10px}
+.recipe-name{font-weight:bold}.recipe-platform{font-size:12px;color:#777;margin-top:4px}
+.recipe-actions{display:flex;gap:5px}.small{padding:7px 9px;font-size:12px}
+.week-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.week-title{font-size:20px;font-weight:bold}.week-actions{display:flex;gap:7px;flex-wrap:wrap}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-top:16px}
+.day{border:1px solid #dddde5;border-radius:13px;padding:12px;min-height:190px;display:flex;flex-direction:column}
+.day-name{text-transform:uppercase;color:#666;font-size:12px;font-weight:bold}.date{font-size:12px;color:#888;margin:4px 0 12px}
+.meal{background:#efeeff;border-radius:10px;padding:12px;margin-top:auto}.meal-name{font-weight:bold;line-height:1.25}
+.open{display:inline-block;margin-top:9px;color:#5b53ed;text-decoration:none;font-size:13px;font-weight:bold}
+.day-buttons{display:flex;gap:5px;margin-top:8px}.day-buttons button{padding:8px 6px;font-size:11px;flex:1}
+.empty{text-align:center;color:#777;padding:30px 10px}.note{background:#f0efff;padding:12px;border-radius:10px;color:#514bd0;font-size:13px;margin-top:12px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;padding:15px;z-index:5}.modal.show{display:flex}
+.modal-box{background:white;border-radius:16px;max-width:600px;width:100%;max-height:80vh;overflow:auto;padding:18px}
+.choice{width:100%;text-align:left;background:#f7f7fa;margin-top:7px;border:1px solid #ddd;padding:12px}.choice:hover{background:#eeedff}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:11px 15px;border-radius:10px;display:none}
+@media(max-width:800px){.days{grid-template-columns:repeat(2,1fr)}.recipe-list{grid-template-columns:1fr}}
+@media(max-width:520px){.app{padding:12px}.form{grid-template-columns:1fr}.full{grid-column:auto}.days{grid-template-columns:1fr}.day{min-height:150px}.top{align-items:flex-start}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <div><h1>🍽️ Mi Semana</h1><div class="sub">Organiza tus comidas de forma sencilla</div></div>
+    <button class="secondary" onclick="exportData()">Exportar datos</button>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('week',this)">📅 Mi semana</button>
+    <button class="tab" onclick="showTab('recipes',this)">🍲 Mis recetas</button>
+  </div>
+
+  <section id="week" class="panel">
+    <div class="week-head">
+      <div><div class="week-title" id="weekTitle"></div><div class="sub">Las recetas no se repiten en semanas consecutivas.</div></div>
+      <div class="week-actions">
+        <button class="secondary" onclick="prevWeek()">‹</button>
+        <button class="secondary" onclick="nextWeek()">›</button>
+        <button class="primary" onclick="generateWeek()">🎲 Generar semana</button>
+      </div>
+    </div>
+    <div id="days" class="days"></div>
+    <div id="weekNote" class="note"></div>
+  </section>
+
+  <section id="recipes" class="panel hidden">
+    <h2>Añadir receta</h2>
+    <div class="sub">Puedes guardar recetas de Cookidoo, YouTube o TikTok.</div>
+    <form class="form" onsubmit="addRecipe(event)" style="margin-top:15px">
+      <div><label>Nombre de la receta</label><input id="name" required placeholder="Ej. Pollo al curry"></div>
+      <div><label>Plataforma</label><select id="platform"><option>Cookidoo</option><option>YouTube</option><option>TikTok</option></select></div>
+      <div class="full"><label>Enlace de la receta</label><input id="url" type="url" required placeholder="https://..."></div>
+      <div class="full"><button class="primary">＋ Añadir receta</button></div>
+    </form>
+    <div id="recipesList" class="recipe-list"></div>
+  </section>
+</div>
+
+<div id="modal" class="modal" onclick="if(event.target===this)closeModal()">
+ <div class="modal-box">
+   <h2 id="modalTitle">Elegir receta</h2>
+   <div class="sub">Selecciona la receta que quieres poner en este día.</div>
+   <div id="choices"></div>
+   <button class="secondary" style="margin-top:12px" onclick="closeModal()">Cancelar</button>
+ </div>
+</div>
+<div id="toast" class="toast"></div>
+
+<script>
+const STORAGE='mi_semana_v2';
+let state=load();
+let current=weekStart(new Date());
+
+function load(){
+ try{
+  const x=JSON.parse(localStorage.getItem(STORAGE));
+  if(x&&Array.isArray(x.recipes)&&x.weeks)return x;
+ }catch(e){}
+ return {recipes:[],weeks:{}};
+}
+function save(){localStorage.setItem(STORAGE,JSON.stringify(state))}
+function id(){return Date.now().toString(36)+Math.random().toString(36).slice(2)}
+function weekStart(d){
+ d=new Date(d);d.setHours(0,0,0,0);
+ d.setDate(d.getDate()-((d.getDay()+6)%7));return d;
+}
+function key(d){return weekStart(d).toISOString().slice(0,10)}
+function dateText(d){return d.toLocaleDateString('es-ES',{day:'numeric',month:'short'})}
+function escape(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
+function showTab(name,btn){
+ document.querySelectorAll('section').forEach(x=>x.classList.add('hidden'));
+ document.getElementById(name).classList.remove('hidden');
+ document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));btn.classList.add('active');
+ if(name==='recipes')renderRecipes();
+}
+function toast(s){let t=document.getElementById('toast');t.textContent=s;t.style.display='block';setTimeout(()=>t.style.display='none',1800)}
+
+function addRecipe(e){
+ e.preventDefault();
+ let n=document.getElementById('name').value.trim(),u=document.getElementById('url').value.trim(),p=document.getElementById('platform').value;
+ state.recipes.push({id:id(),name:n,url:u,platform:p});
+ save();e.target.reset();renderRecipes();toast('Receta añadida');
+}
+function renderRecipes(){
+ let box=document.getElementById('recipesList');
+ if(!state.recipes.length){box.innerHTML='<div class="empty">Todavía no has añadido ninguna receta.</div>';return}
+ box.innerHTML=state.recipes.map(r=>`<div class="recipe">
+  <div><div class="recipe-name">${escape(r.name)}</div><div class="recipe-platform">${escape(r.platform)}</div></div>
+  <div class="recipe-actions"><button class="secondary small" onclick="window.open('${escape(r.url)}','_blank')">Abrir</button><button class="secondary small" onclick="removeRecipe('${r.id}')">Borrar</button></div>
+ </div>`).join('');
+}
+function removeRecipe(rid){
+ if(!confirm('¿Borrar esta receta?'))return;
+ state.recipes=state.recipes.filter(r=>r.id!==rid);
+ Object.values(state.weeks).forEach(w=>w.days=w.days.map(x=>x===rid?null:x));
+ save();renderRecipes();renderWeek();toast('Receta borrada');
+}
+
+/* Regla importante:
+   Una receta usada en la semana anterior queda bloqueada para la semana actual.
+   Dentro de una misma semana tampoco puede repetirse mientras haya suficientes recetas. */
+function previousWeekIds(){
+ let d=new Date(current);d.setDate(d.getDate()-7);
+ let w=state.weeks[key(d)];
+ return new Set(w?.days||[]);
+}
+function generateWeek(){
+ if(state.recipes.length<7){
+  toast('Necesitas al menos 7 recetas para generar una semana sin repetir');
+  return;
+ }
+ let blocked=previousWeekIds();
+ let pool=state.recipes.filter(r=>!blocked.has(r.id));
+ if(pool.length<7){
+  toast('Necesitas al menos 14 recetas para evitar repeticiones entre semanas consecutivas');
+  return;
+ }
+ pool=shuffle(pool);
+ let days=pool.slice(0,7).map(r=>r.id);
+ state.weeks[key(current)]={days};
+ save();renderWeek();toast('Semana generada');
+}
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+function renderWeek(){
+ let k=key(current),w=state.weeks[k];
+ let end=new Date(current);end.setDate(end.getDate()+6);
+ document.getElementById('weekTitle').textContent='Semana · '+dateText(current)+' – '+dateText(end);
+ let names=['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+ let html='';
+ for(let i=0;i<7;i++){
+  let d=new Date(current);d.setDate(d.getDate()+i);
+  let r=w?.days?.[i]?state.recipes.find(x=>x.id===w.days[i]):null;
+  html+=`<div class="day"><div class="day-name">${names[i]}</div><div class="date">${dateText(d)}</div>`;
+  if(r)html+=`<div class="meal"><div class="meal-name">${escape(r.name)}</div><a class="open" href="${escape(r.url)}" target="_blank" rel="noopener">Abrir receta ↗</a></div>
+  <div class="day-buttons"><button class="secondary" onclick="randomDay(${i})">🎲 Aleatoria</button><button class="secondary" onclick="chooseDay(${i})">📋 Elegir</button></div>`;
+  else html+=`<div class="empty">Sin receta</div>`;
+  html+='</div>';
+ }
+ document.getElementById('days').innerHTML=html;
+ let count=state.recipes.length;
+ document.getElementById('weekNote').textContent=count<14?'Para cumplir la regla de una semana de separación, lo ideal son al menos 14 recetas. Con menos de 14 no se generará una semana que incumpla esa regla.':'Con '+count+' recetas puedes generar semanas consecutivas sin repetir recetas entre ellas.';
+}
+function randomDay(i){
+ let w=state.weeks[key(current)];
+ if(!w){toast('Primero genera la semana');return}
+ let used=new Set(w.days),blocked=previousWeekIds();
+ let candidates=state.recipes.filter(r=>!used.has(r.id)&&!blocked.has(r.id));
+ if(!candidates.length){toast('No quedan recetas válidas para este día');return}
+ w.days[i]=candidates[Math.floor(Math.random()*candidates.length)].id;
+ save();renderWeek();
+}
+function chooseDay(i){
+ let w=state.weeks[key(current)];if(!w)return;
+ let used=new Set(w.days),blocked=previousWeekIds(),currentId=w.days[i];
+ let candidates=state.recipes.filter(r=>r.id===currentId||(!used.has(r.id)&&!blocked.has(r.id)));
+ document.getElementById('modalTitle').textContent='Elegir receta para '+['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'][i];
+ document.getElementById('choices').innerHTML=candidates.map(r=>`<button class="choice" onclick="setDay(${i},'${r.id}')"><b>${escape(r.name)}</b><br><span class="sub">${escape(r.platform)}</span></button>`).join('');
+ document.getElementById('modal').classList.add('show');
+}
+function setDay(i,rid){
+ let w=state.weeks[key(current)];w.days[i]=rid;save();closeModal();renderWeek();
+}
+function closeModal(){document.getElementById('modal').classList.remove('show')}
+function prevWeek(){current.setDate(current.getDate()-7);renderWeek()}
+function nextWeek(){current.setDate(current.getDate()+7);renderWeek()}
+
+function exportData(){
+ let blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
+ let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='mi-semana-datos.json';a.click();
+}
+renderWeek();
+</script>
+</body>
+</html>
