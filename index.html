@@ -1,14 +1,14 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#635bff"><title>Mi Semana V5.1</title><style>
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#635bff"><title>Mi Semana V5.2 Backend</title><style>
 *{box-sizing:border-box}body{margin:0;background:#f4f5f9;color:#20222b;font-family:Arial,sans-serif}.app{max-width:1100px;margin:auto;padding:16px}.top,.head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}h1{margin:0;font-size:28px}.sub{color:#777;font-size:13px}button{border:0;border-radius:10px;padding:10px 13px;cursor:pointer;font-weight:700}.primary{background:#635bff;color:white}.secondary{background:white;border:1px solid #ddd}.tabs{display:flex;gap:7px;margin:16px 0;overflow:auto}.tab{background:white;border:1px solid #ddd;white-space:nowrap}.tab.active{background:#635bff;color:white}.panel{background:white;border:1px solid #e1e2e9;border-radius:15px;padding:17px;margin-bottom:15px}.hidden{display:none}.days{display:grid;grid-template-columns:repeat(7,1fr);gap:9px;margin-top:15px}.day{border:1px solid #ddd;border-radius:12px;padding:11px;min-height:190px;display:flex;flex-direction:column}.dayname{text-transform:uppercase;font-size:11px;font-weight:bold;color:#666}.date{font-size:11px;color:#888;margin:4px 0 10px}.meal{background:#efeeff;border-radius:10px;padding:11px;margin-top:auto}.meal b{line-height:1.25}.open{display:block;color:#554de5;text-decoration:none;font-size:12px;font-weight:bold;margin-top:8px}.daybtn{display:flex;gap:5px;margin-top:7px}.daybtn button{font-size:10px;padding:7px 4px;flex:1}.form{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.full{grid-column:1/-1}label{display:block;font-weight:bold;font-size:12px;margin-bottom:5px}input,select,textarea{width:100%;padding:10px;border:1px solid #d8d9e1;border-radius:9px;background:white}textarea{min-height:90px}.search{display:grid;grid-template-columns:1fr 170px;gap:8px;margin-top:14px}.recipes{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:13px}.recipe{border:1px solid #ddd;border-radius:11px;padding:11px;display:flex;justify-content:space-between;gap:8px}.meta{font-size:11px;color:#777;margin-top:4px}.actions{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}.small{font-size:11px;padding:6px 8px}.item{display:flex;gap:9px;align-items:center;padding:10px 0;border-bottom:1px solid #eee}.item input{width:20px}.qty{color:#666;font-size:12px;margin-left:auto}.history{border:1px solid #ddd;border-radius:11px;padding:12px;margin-top:9px;font-size:13px}.note{margin-top:12px;background:#f0efff;color:#5048cf;padding:11px;border-radius:9px;font-size:12px}.modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:15px;z-index:5}.modal.show{display:flex}.box{background:#fff;border-radius:15px;padding:17px;width:min(620px,100%);max-height:85vh;overflow:auto}.choice{width:100%;text-align:left;margin-top:7px;background:#f7f7fa;border:1px solid #ddd}.empty{text-align:center;color:#777;padding:25px}.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:10px 14px;border-radius:9px;display:none;z-index:10}
 .thumb{width:86px;height:86px;object-fit:cover;border-radius:10px;border:1px solid #ddd;flex:none}
 .photo-preview{margin-top:8px}.photo-preview img{max-width:180px;max-height:140px;border-radius:10px;border:1px solid #ddd;object-fit:cover}
 .recipe-media{display:flex;gap:10px;align-items:flex-start}.view-photo{display:block;width:100%;max-height:420px;object-fit:contain;background:#f5f5f7;border-radius:12px;margin:8px 0 14px}
-.steps{white-space:pre-wrap;line-height:1.55;background:#f7f7fa;padding:12px;border-radius:10px;margin-top:8px}
+.steps{white-space:pre-wrap;line-height:1.55;background:#f7f7fa;padding:12px;border-radius:10px;margin-top:8px}.import-img{max-width:220px;max-height:160px;border-radius:10px;border:1px solid #ddd;object-fit:contain}.readonly{background:#f5f5f7}
 @media(max-width:850px){.days{grid-template-columns:repeat(2,1fr)}.recipes{grid-template-columns:1fr}}@media(max-width:550px){.days{grid-template-columns:1fr}.form,.search{grid-template-columns:1fr}.full{grid-column:auto}}
-</style></head><body><div class="app"><div class="top"><div><h1>🍽️ Mi Semana</h1><div class="sub">Planifica tus comidas y tu compra</div></div><button class="secondary" onclick="exportData()">Exportar datos</button></div><div class="tabs"><button class="tab active" onclick="tab('week',this)">📅 Semana</button><button class="tab" onclick="tab('recipes',this)">🍲 Recetas</button><button class="tab" onclick="tab('shopping',this)">🛒 Compra</button><button class="tab" onclick="tab('history',this)">🕘 Historial</button></div>
+</style></head><body><div class="app"><div class="top"><div><h1>🍽️ Mi Semana</h1><div class="sub">Planifica tus comidas y tu compra</div></div><button class="secondary" onclick="exportData()">Exportar datos</button></div><div class="tabs"><button class="tab active" onclick="tab('week',this)">📅 Semana</button><button class="tab" onclick="tab('recipes',this)">🍲 Recetas</button><button class="tab" onclick="tab('import',this)">✨ Importar</button><button class="tab" onclick="tab('shopping',this)">🛒 Compra</button><button class="tab" onclick="tab('history',this)">🕘 Historial</button></div>
 <section id="week" class="panel"><div class="head"><div><b id="weekTitle"></b><div class="sub">Cada receta respeta su bloqueo de 1 a 4 semanas. Las recetas personales pueden llevar una foto y verse dentro de la app.</div></div><div><button class="secondary" onclick="move(-7)">‹</button> <button class="secondary" onclick="move(7)">›</button> <button class="primary" onclick="generate()">🎲 Generar semana</button></div></div><div id="days" class="days"></div><div id="weekNote" class="note"></div></section>
 <section id="recipes" class="panel hidden"><h2>🍲 Mis recetas</h2>
-<div class="sub">Ahora puedes guardar recetas online o recetas personales con una foto de la receta escrita en papel. Las recetas personales no necesitan enlace.</div>
+<div class="sub">Ahora puedes guardar recetas online o recetas personales con una foto de la receta escrita en papel. También puedes importar enlaces desde la pestaña ✨ Importar. Las recetas personales no necesitan enlace.</div>
 <div class="search"><input id="q" oninput="renderRecipes()" placeholder="🔎 Buscar receta, ingrediente o enlace"><select id="f" onchange="renderRecipes()"><option>Todos</option><option>Online</option><option>Personal</option><option>Cookidoo</option><option>YouTube</option><option>TikTok</option></select></div>
 <form class="form" onsubmit="add(event)">
 <div><label>Nombre</label><input id="name" required placeholder="Ej. Estofado de mi abuela"></div>
@@ -21,6 +21,30 @@
 <div class="full"><label>Preparación / pasos (opcional)</label><textarea id="steps" placeholder="1. Sofríe la cebolla...&#10;2. Añade la carne...&#10;3. Cocina durante..."></textarea></div>
 <div class="full"><button class="primary">＋ Añadir receta</button></div>
 </form><div id="recipesList" class="recipes"></div></section>
+<section id="import" class="panel hidden"><h2>✨ Importar receta</h2>
+<div class="sub">Pega un enlace de Cookidoo, YouTube o TikTok. Mi Semana identificará la plataforma e intentará recuperar la información pública disponible. Antes de guardarla podrás revisar y corregir los datos.</div>
+<div class="note"><b>Configuración del importador avanzado</b><br>
+Introduce la URL de tu backend una sola vez. La app la guardará en este dispositivo.
+<div style="display:flex;gap:8px;margin-top:8px"><input id="backendUrl" class="readonly" placeholder="https://tu-backend.workers.dev"><button class="secondary" onclick="saveBackendUrl()">Guardar</button></div>
+</div>
+<div class="form">
+<div class="full"><label>Enlace de la receta</label><input id="importUrl" type="url" placeholder="https://www.youtube.com/...  ·  https://www.tiktok.com/...  ·  https://cookidoo..."></div>
+<div class="full"><button class="primary" onclick="importRecipe()">🔎 Analizar enlace</button></div>
+</div>
+<div id="importStatus" class="note" style="display:none"></div>
+<div id="importResult" style="display:none;margin-top:14px">
+<div class="form">
+<div><label>Nombre</label><input id="inName"></div>
+<div><label>Plataforma</label><input id="inPlatform" readonly></div>
+<div class="full"><label>Enlace original</label><input id="inUrl" readonly></div>
+<div class="full"><label>Ingredientes (uno por línea)</label><textarea id="inIngredients" placeholder="Revisa y completa los ingredientes antes de guardar."></textarea></div>
+<div class="full"><label>Preparación / pasos</label><textarea id="inSteps" placeholder="Revisa y completa los pasos antes de guardar."></textarea></div>
+<div><label>Bloquear</label><select id="inCooldown"><option value="1">1 semana</option><option value="2">2 semanas</option><option value="3">3 semanas</option><option value="4">4 semanas</option></select></div>
+<div id="inPhotoWrap"><label>Foto obtenida (opcional)</label><div id="inPhoto"></div></div>
+<div class="full"><button class="primary" onclick="saveImported()">💾 Guardar en Mis recetas</button></div>
+</div></div>
+<div class="note">💡 Importante: la importación no copiará contenido que la plataforma no exponga públicamente. En vídeos, si no hay texto accesible, podrás completar ingredientes y pasos manualmente. Así evitamos guardar datos inventados.</div>
+</section>
 <section id="shopping" class="panel hidden"><div class="head"><div><h2>🛒 Lista de la compra</h2><div class="sub">Se crea con las recetas de la semana seleccionada.</div></div><button class="secondary" onclick="copyList()">Copiar lista</button></div><div id="shoppingList"></div><div class="note">Puedes escribir “500 g pollo”, “2 unidades tomate”, “1 cebolla”, etc. Los ingredientes iguales se agrupan.</div></section>
 <section id="history" class="panel hidden"><div class="head"><div><h2>🕘 Historial</h2><div class="sub">Se guardan las semanas generadas y sus recetas.</div></div><button class="secondary" onclick="clearHistory()">Borrar historial</button></div><div id="historyList"></div></section></div>
 <div id="modal" class="modal" onclick="if(event.target===this)closeModal()"><div class="box"><h2 id="modalTitle">Elegir receta</h2><div class="sub">Solo aparecen recetas permitidas y no usadas otro día.</div><div id="choices"></div><button class="secondary" onclick="closeModal()">Cancelar</button></div></div>
@@ -132,5 +156,96 @@ function renderWeek(){let k=key(cur),w=S.weeks[k],e=new Date(cur);e.setDate(e.ge
 function parseIngredient(line){line=line.trim();if(!line)return null;let m=line.match(/^(\d+(?:[.,]\d+)?)\s*(kg|g|mg|l|ml|cl|dl|unidades?|uds?|paquetes?|paquete|latas?|lata|cucharadas?|cucharada|cucharaditas?|cucharadita)\s+(.+)$/i);if(m)return{q:+m[1].replace(',','.'),u:m[2].toLowerCase(),n:m[3].trim()};m=line.match(/^(\d+(?:[.,]\d+)?)\s+(.+)$/);if(m)return{q:+m[1].replace(',','.'),u:'unidad',n:m[2].trim()};return{q:1,u:'unidad',n:line}}
 function renderShopping(){let w=S.weeks[key(cur)],m=new Map();if(w)(w.days||[]).forEach(id=>{let r=S.recipes.find(x=>x.id===id);if(r)(r.ingredients||'').split('\n').forEach(line=>{let x=parseIngredient(line);if(!x)return;let k=(x.n+'|'+x.u).toLowerCase(),z=m.get(k)||{n:x.n,u:x.u,q:0};z.q+=x.q;m.set(k,z)})});if(!m.size){shoppingList.innerHTML='<div class="empty">Añade ingredientes a tus recetas y genera una semana.</div>';return}shoppingList.innerHTML=[...m].sort((a,b)=>a[1].n.localeCompare(b[1].n)).map(([k,x])=>`<div class="item"><input type="checkbox" ${checked[k]?'checked':''} onchange="checked['${esc(k)}']=this.checked"><div>${esc(x.n)}</div><div class="qty">${Number.isInteger(x.q)?x.q:Math.round(x.q*100)/100} ${esc(x.u)}</div></div>`).join('')}
 function copyList(){let w=S.weeks[key(cur)],m=new Map();if(w)(w.days||[]).forEach(id=>{let r=S.recipes.find(x=>x.id===id);if(r)(r.ingredients||'').split('\n').forEach(line=>{let x=parseIngredient(line);if(!x)return;let k=(x.n+'|'+x.u).toLowerCase(),z=m.get(k)||{n:x.n,u:x.u,q:0};z.q+=x.q;m.set(k,z)})});let text='LISTA DE LA COMPRA\n\n'+[...m.values()].map(x=>`${Number.isInteger(x.q)?x.q:Math.round(x.q*100)/100} ${x.u} ${x.n}`).join('\n');navigator.clipboard?.writeText(text).then(()=>msg('Lista copiada')).catch(()=>msg('No se pudo copiar'))}
-function renderHistory(){if(!S.history.length){historyList.innerHTML='<div class="empty">Todavía no hay semanas.</div>';return}historyList.innerHTML=S.history.map(h=>{let d=new Date(h.key+'T00:00:00'),e=new Date(d);e.setDate(e.getDate()+6);return `<div class="history"><b>${dt(d)} – ${dt(e)}</b><div class="meta">${h.days.map((id,i)=>{let r=S.recipes.find(x=>x.id===id);return ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'][i]+': '+esc(r?.name||'Eliminada')}).join(' · ')}</div><button class="secondary small" onclick="goHistory('${h.key}')">Ver semana</button></div>`}).join('')}function goHistory(k){cur=start(new Date(k+'T00:00:00'));tab('week',document.querySelector('.tab'));renderWeek();renderShopping()}function clearHistory(){if(confirm('¿Borrar todo el historial? Esto elimina la información usada para bloquear recetas.')){S.history=[];save();renderHistory();renderWeek();msg('Historial borrado')}}function exportData(){let b=new Blob([JSON.stringify(S,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='mi-semana-datos.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}toggleRecipeFields();toggleEditFields();renderWeek();
+function renderHistory(){if(!S.history.length){historyList.innerHTML='<div class="empty">Todavía no hay semanas.</div>';return}historyList.innerHTML=S.history.map(h=>{let d=new Date(h.key+'T00:00:00'),e=new Date(d);e.setDate(e.getDate()+6);return `<div class="history"><b>${dt(d)} – ${dt(e)}</b><div class="meta">${h.days.map((id,i)=>{let r=S.recipes.find(x=>x.id===id);return ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'][i]+': '+esc(r?.name||'Eliminada')}).join(' · ')}</div><button class="secondary small" onclick="goHistory('${h.key}')">Ver semana</button></div>`}).join('')}function goHistory(k){cur=start(new Date(k+'T00:00:00'));tab('week',document.querySelector('.tab'));renderWeek();renderShopping()}function clearHistory(){if(confirm('¿Borrar todo el historial? Esto elimina la información usada para bloquear recetas.')){S.history=[];save();renderHistory();renderWeek();msg('Historial borrado')}}function exportData(){let b=new Blob([JSON.stringify(S,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='mi-semana-datos.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}// Importador avanzado: las variables deben existir ANTES de cualquier inicialización
+// que pueda leerlas. Esto evita errores "Cannot access ... before initialization".
+let importedData={url:'',platform:'',name:'',ingredients:'',steps:'',photo:''};
+
+// URL del Worker de Cloudflare. Se puede cambiar desde la configuración de la app.
+// Si existe una URL guardada en este dispositivo, tiene prioridad.
+const IMPORT_BACKEND_URL = localStorage.getItem('mi_semana_import_backend') || 'https://mi-semana-importador.samuelalcarazconesa.workers.dev';
+
+toggleRecipeFields();
+toggleEditFields();
+initBackendField();
+renderWeek();
+
+
+function detectPlatform(u){
+  try{
+    let h=new URL(u).hostname.toLowerCase();
+    if(h.includes('tiktok.com')) return 'TikTok';
+    if(h.includes('youtube.com')||h.includes('youtu.be')) return 'YouTube';
+    if(h.includes('cookidoo')) return 'Cookidoo';
+    return 'Web';
+  }catch(e){return ''}
+}
+function setImportStatus(t,ok=false){
+  let el=document.getElementById('importStatus');el.style.display='block';el.textContent=t;
+  el.style.background=ok?'#eefaf1':'#f0efff';el.style.color=ok?'#24723a':'#5048cf';
+}
+function showImportResult(){
+  document.getElementById('importResult').style.display='block';
+  inName.value=importedData.name||'Receta importada';
+  inPlatform.value=importedData.platform;
+  inUrl.value=importedData.url;
+  inIngredients.value=importedData.ingredients||'';
+  inSteps.value=importedData.steps||'';
+  document.getElementById('inPhoto').innerHTML=importedData.photo?`<img class="import-img" src="${esc(importedData.photo)}" alt="">`:'<span class="meta">No se encontró imagen.</span>';
+}
+async function importRecipe(){
+  let u=document.getElementById('importUrl').value.trim();
+  if(!u){msg('Pega primero un enlace');return}
+  let p=detectPlatform(u);
+  if(!p){setImportStatus('No reconozco esta plataforma.');return}
+  importedData={url:u,platform:p,name:'',ingredients:'',steps:'',photo:''};
+  document.getElementById('importResult').style.display='none';
+
+  if(!IMPORT_BACKEND_URL){
+    setImportStatus('El importador avanzado necesita configurar el backend. Mientras tanto puedes completar la receta manualmente en este formulario.');
+    showImportResult();
+    return;
+  }
+
+  setImportStatus('🤖 Analizando la página y estructurando la receta…');
+  try{
+    let r=await fetch(IMPORT_BACKEND_URL.replace(/\/$/,'')+'/import-recipe',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({url:u})
+    });
+    let d=await r.json().catch(()=>({}));
+    if(!r.ok)throw new Error(d.error||'El backend no pudo analizar el enlace');
+    importedData={
+      url:u,
+      platform:d.platform||p,
+      name:d.name||'',
+      ingredients:Array.isArray(d.ingredients)?d.ingredients.join('\n'):(d.ingredients||''),
+      steps:Array.isArray(d.steps)?d.steps.map((x,i)=>`${i+1}. ${x}`).join('\n'):(d.steps||''),
+      photo:d.photo||''
+    };
+    setImportStatus('✅ Receta analizada. Revisa los datos antes de guardarla.',true);
+    showImportResult();
+  }catch(err){
+    setImportStatus('No se pudo importar automáticamente: '+(err.message||'Error desconocido')+'. Puedes completar los datos manualmente.',false);
+    showImportResult();
+  }
+}
+function saveBackendUrl(){
+  let v=document.getElementById('backendUrl').value.trim().replace(/\/$/,'');
+  if(v){localStorage.setItem('mi_semana_import_backend',v);msg('Backend guardado');}
+}
+function initBackendField(){
+  let e=document.getElementById('backendUrl');
+  if(e)e.value=IMPORT_BACKEND_URL;
+}
+function saveImported(){
+  let name=inName.value.trim();
+  if(!name){msg('Escribe un nombre');return}
+  let r={id:uid(),name,type:'online',platform:inPlatform.value,url:inUrl.value.trim(),cooldown:+inCooldown.value,ingredients:inIngredients.value.trim(),steps:inSteps.value.trim(),photo:importedData.photo||''};
+  S.recipes.push(r);save();renderRecipes();
+  document.getElementById('importUrl').value='';document.getElementById('importResult').style.display='none';
+  document.getElementById('importStatus').style.display='none';importedData={url:'',platform:'',name:'',ingredients:'',steps:'',photo:''};
+  msg('Receta importada y guardada');
+}
+
 </script></body></html>
